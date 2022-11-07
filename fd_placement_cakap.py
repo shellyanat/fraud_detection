@@ -26,100 +26,237 @@ st.image(image, output_format='PNG', width=480)
 '''
 
 # upload file
-uploaded_file = st.file_uploader("Choose a XLSX file")
+'''
+### Import Data
+
+##### Upload Placement Dataset Here (XLSX)
+'''
+
+uploaded_file = st.file_uploader("Upload Placement File (XLSX)")
 if uploaded_file is not None:
-    dataframe = pd.read_excel(uploaded_file)
+    dataframe1 = pd.read_excel(uploaded_file)
     #st.write(dataframe)
-df = dataframe.copy()
+df_p1 = dataframe1.copy()
+
+'''
+##### Upload Activity Dataset Here (XLSX)
+'''
+
+uploaded_file = st.file_uploader("Upload Activity File (XLSX)")
+if uploaded_file is not None:
+    dataframe2 = pd.read_excel(uploaded_file)
+    #st.write(dataframe)
+df_a1 = dataframe2.copy()
+
+##### ---- P R O C E S S I N G ----
+
+## ----- PLACEMENT ------
+
+#### M I S S I N G  V A L U E S
+# drop missing values on agent_id column
+# the reasons is later we will define the fraud based on the phone call from agent was held or not
+# so if there's no agent_id, it will be hard to indicate the students as a fraud 
+df_p1 = df_p1.drop(df_p1[(df_p1['agent_id'].isna() == True) & (df_p1['call_before_pt'].isna() == True) & (df_p1['call_after_pt'].isna() == True)].index)
 
 
-# handle missing value
+#### D A T A  T Y P E
 
-## drop all rows where the agent_id is null
-df = df.drop(df[(df['agent_id'].isna() == True)].index)
+#change column with dtype float to int
+df_p1['student_id'] = df_p1['student_id'].astype(int)
+df_p1['total_call_before_pt'] = df_p1['total_call_before_pt'].astype(int)
+df_p1['total_call_after_pt'] = df_p1['total_call_after_pt'].astype(int)
+df_p1['teacher_id'] = df_p1['teacher_id'].astype(int)
+df_p1['agent_id'] = df_p1['agent_id'].astype(int)
 
-## create some columns to help
-df['call_before_pt_yes'] = np.where(df['call_before_pt'].isna() == False, True, False)
-df['call_after_pt_yes'] = np.where(df['call_after_pt'].isna() == False, True, False)
-##if isna false, then call_pt_yes value is true (there's call), else False (no call)
+#### M A P P I N G -- new columns for help
 
-## mapping held_at
-df['not_held'] = df['held_at'].isna()
-df['held_at_1'] = df['held_at'].str.contains(r'1',na=False)
-df['held_at_2'] = df['held_at'].str.contains(r'2',na=False)
-df['held_at_3'] = df['held_at'].str.contains(r'3',na=False)
-df['held_at_4'] = df['held_at'].str.contains(r'4',na=False)
-df['total_held'] = df[['held_at_1', 'held_at_2','held_at_3','held_at_4']].sum(axis=1)
-
-# data types
-## change column with dtype float to int
-df['student_id'] = df['student_id'].astype(int)
-df['total_call_before_pt'] = df['total_call_before_pt'].astype(int)
-df['total_call_after_pt'] = df['total_call_after_pt'].astype(int)
-df['teacher_id'] = df['teacher_id'].astype(int)
-df['agent_id'] = df['agent_id'].astype(int)
+# call history
+#if the agent call the student it will return as True Value
+#if the agent didn't call the student (NaN) it will return as False
+df_p1['call_before_pt_yes'] = np.where(df_p1['call_before_pt'].isna() == False, True, False)
+df_p1['call_after_pt_yes'] = np.where(df_p1['call_after_pt'].isna() == False, True, False)
 
 
-# NEW DATAFRAME, GROUP BY TEACHER
-df_teacher = df.copy()
+#mapping held_at
+df_p1['not_held'] = df_p1['held_at'].isna()
+df_p1['held_at_1'] = df_p1['held_at'].str.contains(r'1',na=False)
+df_p1['held_at_2'] = df_p1['held_at'].str.contains(r'2',na=False)
+df_p1['held_at_3'] = df_p1['held_at'].str.contains(r'3',na=False)
+df_p1['held_at_4'] = df_p1['held_at'].str.contains(r'4',na=False)
+#total student held the agent's phone call
+df_p1['total_held'] = df_p1[['held_at_1', 'held_at_2','held_at_3','held_at_4']].sum(axis=1)
 
-## mapping buy premium after pt
-df_teacher['buy_premium_y'] =  df_teacher['buy_premium_after_pt'].str.contains(r'y',na=False)
-df_teacher['buy_premium_n'] =  df_teacher['buy_premium_after_pt'].str.contains(r'n',na=False)
 
-## drop unimportant columns
-df_teacher = df_teacher.drop(['student_id','agent_id','call_before_pt', 'call_after_pt','held_at','buy_premium_after_pt'], axis=1)
+#mapping buy premium after pt (boolean) and student_presence
+df_p1['buy_premium_y'] =  df_p1['buy_premium_after_pt'].str.contains(r'y',na=False)
+df_p1['buy_premium_n'] =  df_p1['buy_premium_after_pt'].str.contains(r'n',na=False)
+df_p1['student_presence_y'] = df_p1['student_presence'].str.contains(r'Y',na=False)
+df_p1['student_presence_n'] = df_p1['student_presence'].str.contains(r'N',na=False)
+
+#change astype int (0 - 1)
+df_p1['call_before_pt_yes'] = df_p1['call_before_pt_yes'].astype(int)
+df_p1['call_after_pt_yes'] = df_p1['call_after_pt_yes'].astype(int)
+df_p1['not_held'] = df_p1['not_held'].astype(int)
+df_p1['held_at_1'] = df_p1['held_at_1'].astype(int)
+df_p1['held_at_2'] = df_p1['held_at_2'].astype(int)
+df_p1['held_at_3'] = df_p1['held_at_3'].astype(int)
+df_p1['held_at_4'] = df_p1['held_at_4'].astype(int)
+df_p1['buy_premium_y'] = df_p1['buy_premium_y'].astype(int)
+df_p1['buy_premium_n'] = df_p1['buy_premium_n'].astype(int)
+df_p1['student_presence_y'] = df_p1['student_presence_y'].astype(int)
+df_p1['student_presence_n'] = df_p1['student_presence_n'].astype(int)
+
+#### D R O P  U N I M P O R T A N T  C O L U M N S
+df_p2 = df_p1.copy()
+df_p2 = df_p2.drop(['call_before_pt','call_after_pt','held_at','student_presence'], axis = 1)
 
 
-## change boolean to integer
-df_teacher['call_before_pt_yes'] = df_teacher['call_before_pt_yes'].astype(int)
-df_teacher['call_after_pt_yes'] = df_teacher['call_after_pt_yes'].astype(int)
-df_teacher['not_held'] = df_teacher['not_held'].astype(int)
-df_teacher['held_at_1'] = df_teacher['held_at_1'].astype(int)
-df_teacher['held_at_2'] = df_teacher['held_at_2'].astype(int)
-df_teacher['held_at_3'] = df_teacher['held_at_3'].astype(int)
-df_teacher['held_at_4'] = df_teacher['held_at_4'].astype(int)
-df_teacher['buy_premium_y'] = df_teacher['buy_premium_y'].astype(int)
-df_teacher['buy_premium_n'] = df_teacher['buy_premium_n'].astype(int)
+## ---- ACTIVITY ------
 
-## group all columns by teacher
+### D R O P  U N I M P O R T A N T  C O L U M N S
 
+# the upskill_playback columns filled with zero
+df_a1 = df_a1.drop(['upskill_playback'], axis=1)
+
+#### D A T A  T Y P E
+
+#we want to see students with no activity
+#it's eaasier if we differentiate the value as 0 (no activity) and 1 (there's activity)
+df_a1['attend_private']       = df_a1['attend_private'].astype(bool).astype(int)
+df_a1['attend_semi_private']  = df_a1['attend_semi_private'].astype(bool).astype(int)
+df_a1['attend_corpo_group']   = df_a1['attend_corpo_group'].astype(bool).astype(int)
+df_a1['attend_corpo_priv']    = df_a1['attend_corpo_priv'].astype(bool).astype(int)
+df_a1['finish_chat']          = df_a1['finish_chat'].astype(bool).astype(int)
+df_a1['entry_club']           = df_a1['entry_club'].astype(bool).astype(int)
+df_a1['entry_upskill']        = df_a1['entry_upskill'].astype(bool).astype(int)
+df_a1['selfpaced_join']       = df_a1['selfpaced_join'].astype(bool).astype(int)
+df_a1['video_progress']       = df_a1['video_progress'].astype(bool).astype(int)
+df_a1['feed_like']            = df_a1['feed_like'].astype(bool).astype(int)
+
+#### T O T A L  A C T I V I T Y
+#see the total activity of each student
+#without the attend_private column
+df_a2 = df_a1.copy()
+df_a2['other_act'] = df_a2.iloc[: ,2:].sum(axis = 1)
+
+#### S I M P I F L Y  T H E  D A T A F R A M E
+
+df_a3 = df_a2.copy()
+df_a3['other_act'] = df_a3['other_act'].astype(bool).astype(int)
+df_a3['total_act'] = df_a3.loc[:,['attend_private','other_act']].sum(axis=1)
+df_a3['act_is_zero'] = np.where(df_a3['total_act'] == 0, True, False)
+df_a3['act_is_zero'] = df_a3['act_is_zero'].astype(int)
+df_a3 = df_a3.drop(['attend_semi_private',
+       'attend_corpo_group', 'attend_corpo_priv', 'finish_chat', 'entry_club',
+       'entry_upskill', 'selfpaced_join', 'video_progress', 'feed_like'],axis=1)
+
+## ------ JOIN DATAFRAME ------
+#### J O I N
+
+# the dataframe: placement and activity
+df_p_a = pd.merge(df_p2, df_a3, how = 'outer', left_on = 'student_id', right_on = 'id_user')
+
+#### D R O P
+
+#missing values
+df_p_a = df_p_a.dropna()  
+
+#unimportant columns
+df_p_a = df_p_a.drop(['id_user'], axis=1)
+
+#### S I M P I F L Y  D A T A F R A M E
+df_p_a2 = df_p_a.copy()
+df_p_a2 = df_p_a2.drop(['held_at_1', 'held_at_2', 'held_at_3','held_at_4'],axis=1)
+
+
+## ---- GROUP BY TEACHER ------
+#### D R O P
+#unimportant columns
+df_teacher = df_p_a2.copy()
+df_teacher = df_teacher.drop(['student_id','agent_id','total_call_before_pt', 'total_call_after_pt','call_before_pt_yes', 'call_after_pt_yes','class_date','submit_report_date'], axis=1)
+
+#### G R O U P I N G
+#all columns by teacher
 df_teacher = df_teacher.groupby(df_teacher['teacher_id']).sum().reset_index()
+
+if 'study_name' in df_p_a2.columns:
+    df_sn = df_p_a2.drop(df_p_a2.columns.difference(['teacher_id','study_name']), axis=1)
+    df_sn = df_sn.drop_duplicates()
+    df_teacher = pd.merge(df_teacher, df_sn, how = 'left', on = ['teacher_id'])
+else:
+    df_teacher = df_teacher
 df_teacher.head()
 
-## new columns total student
+#### N E W  C O L U M N S
+#to help
+
+#total student
 df_teacher['total_student'] = (df_teacher['buy_premium_y']+df_teacher['buy_premium_n'])
 
-## columns to help classification of fraud possibility later
-df_teacher['rate_not_held'] = df_teacher['not_held']/df_teacher['total_student']
-df_teacher['rate_bp_y'] = df_teacher['buy_premium_y']/df_teacher['total_student']
-df_teacher['rate_bp_n'] = df_teacher['buy_premium_n']/df_teacher['total_student']
+#student with zero activity percentage (per teacher)
+df_teacher['act_zero_percentage'] = df_teacher['act_is_zero']/df_teacher['total_student']
 
-## columns to see fraud possibiltiy
+#student that doesn't held agent call percentage (per teacher)
+df_teacher['not_held_percentage'] = df_teacher['not_held']/df_teacher['total_student']
+
+#student doesn't presence (per teacher)
+df_teacher['student_presence_n_percentage'] = df_teacher['student_presence_n']/df_teacher['total_student']
+
+#student that doesn't buy premium package percentage (per teacher)
+df_teacher['bp_n_percentage'] = df_teacher['buy_premium_n']/df_teacher['total_student']
+
+#### D A T A  T Y P E
+#change column with dtype float to int
+df_teacher['teacher_id'] = df_teacher['teacher_id'].astype(int)
+df_teacher['total_student'] = df_teacher['total_student'].astype(int)
+df_teacher['buy_premium_y'] = df_teacher['buy_premium_y'].astype(int)
+df_teacher['buy_premium_n'] = df_teacher['total_student'].astype(int)
+
+
+#### F R A U D  P O S S I B I L I T Y
+
+#we trying to create the fraud value based on indication condition
 def f(row):
+    #var1 = 0 #the fraud value of total student
     if row['total_student'] >= df_teacher.total_student.quantile(0.75):
-      if row['rate_bp_n'] >= df_teacher.rate_bp_n.quantile(0.5):
-        if row['rate_not_held'] >= df_teacher.rate_not_held.quantile(0.75):
-          val = 'High'
-        else:
-          val = 'Medium'
-      elif (row['rate_bp_n'] >= df_teacher.rate_bp_n.quantile(0.25)) and (row['rate_bp_n'] < df_teacher.rate_bp_n.quantile(0.5)):
-        val = 'Medium'
-      else:
-        val = 'Low'
-    elif (row['total_student'] >= df_teacher.total_student.quantile(0.5)) and (row['total_student'] < df_teacher.total_student.quantile(0.75)):
-      if row['rate_bp_n'] >= df_teacher.rate_bp_n.quantile(0.5):
-        if row['rate_not_held'] >= df_teacher.rate_not_held.quantile(0.75):
-          val = 'Medium'
-        else:
-          val = 'Low'
-      else:
-        val = 'Low'
+      var1 = 1
+    else:
+      var1 = 0
+
+    #var2 = 0 #the fraud value of not buy premium percentage
+    if row['bp_n_percentage'] >= df_teacher.bp_n_percentage.quantile(0.5):
+      var2 = 1
+    elif row['bp_n_percentage'] >= df_teacher.bp_n_percentage.quantile(0.25) and (row['bp_n_percentage'] < df_teacher.bp_n_percentage.quantile(0.5)):
+      var2 = 0.5
+    else:
+      var2 = 0
+
+    #var3 = 0 #the fraud value of not held percentage
+    if row['not_held_percentage'] >= df_teacher.not_held_percentage.quantile(0.75):
+      var3 = 1
+    #elif row['not_held_percentage'] >= df_teacher.not_held_percentage.quantile(0.25) and (row['not_held_percentage'] < df_teacher.not_held_percentage.quantile(0.5)):
+      #var2 = 0.5
+    else:
+      var3 = 0
+
+    #var4 = 0 #the fraud value of activity zero percentage
+    if row['act_zero_percentage'] >= df_teacher.act_zero_percentage.quantile(0.9):
+      var4 = 0.5
+    else:
+      var4 = 0
+
+    total = var1 + var2 + var3 + var4
+    if total >= 3:
+      val = 'High'
+    elif total >= 2:
+      val = 'Medium'
     else:
       val = 'Low'
     return val
 
 df_teacher['fraud_possibility'] = df_teacher.apply(f, axis=1)
+
+
 
 ## Pie chart
 df_fp_count  = df_teacher['fraud_possibility'].value_counts().rename_axis('fraud_possibility').reset_index(name='counts')
@@ -127,13 +264,6 @@ labels = df_fp_count['fraud_possibility']
 sizes = df_fp_count['counts']
 explode = (0, 0, 0.1)  # only "explode" the 3rd slice
 
-
-if 'study_name' in df.columns:
-    df_sn = df.drop(df.columns.difference(['teacher_id','study_name']), axis=1)
-    df_sn = df_sn.drop_duplicates()
-    df_teacher = pd.merge(df_teacher, df_sn, how = 'left', on = ['teacher_id'])
-else:
-    df_teacher = df_teacher
 
 col_1, col_2 = st.columns(2)
 
@@ -145,10 +275,7 @@ with col_2:
 
 ## show teacher with high fraud possibility
 df_fp = df_teacher.copy()
-df_fp = df_fp.drop(['total_call_before_pt', 'total_call_after_pt',
-       'call_before_pt_yes', 'call_after_pt_yes', 'not_held', 'held_at_1',
-       'held_at_2', 'held_at_3', 'held_at_4', 'total_held', 'buy_premium_y','rate_not_held', 'rate_bp_y',
-       'rate_bp_n'], axis=1)
+df_fp = df_fp.drop(df_fp.columns.difference(['teacher_id','study_name','total_student','bp_n_percentage','fraud_possibility']), axis=1)
 
 
 High = df_fp[df_fp['fraud_possibility']== 'High'].reset_index(drop=True)
