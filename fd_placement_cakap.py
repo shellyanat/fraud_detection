@@ -407,7 +407,7 @@ st.markdown("---")
 '''
 ### Analyze Data
 '''
-tab1, tab2, tab3 = st.tabs(['Indicator Variable','Fraud Possibility Level','Dataframe'])
+tab1, tab2, tab3 = st.tabs(['Indicator Variable','Fraud Possibility Level','Result'])
 with tab1:
     '''
     ##### The Indicator Variable for Fraud Possibility
@@ -445,6 +445,15 @@ with tab3:
         st.metric('Total Teacher with Medium Possibility of Fraud', Medium['teacher_id'].nunique())    
     with col3:
         st.metric('Total Teacher with High Possibility of Fraud', High['teacher_id'].nunique())
+    df_fraud_possibility = df_fp['fraud_possibility'].value_counts().rename_axis('fraud_possibility').reset_index(name='counts')
+    fig_pie1 = go.Figure(data=[go.Pie(labels=df_fraud_possibility['fraud_possibility'],
+                             values=df_fraud_possibility['counts'])])
+    fig_pie1.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
+                      marker=dict(colors=px.colors.qualitative.Set2, line=dict(color='#000000', width=2)))
+    fig_pie1.update_layout(title_text='Fraud Possibility',title_x=0.5)
+    fig_pie1.update_layout(legend = dict(font = dict(size = 20)), width=600, height=600)
+    st.plotly_chart(fig_pie1)
+        
     #checkbox
     #by fraud possibility
     pil4, pil5 = st.columns(2)
@@ -492,15 +501,7 @@ with tab2:
     df_teacher2 = df_teacher.copy()
     df_teacher2 = df_teacher2.drop(df_teacher2.iloc[:,1:-8].columns, axis=1)
     st.write(df_teacher2.describe())
-    df_fraud_possibility = df_fp['fraud_possibility'].value_counts().rename_axis('fraud_possibility').reset_index(name='counts')
-    fig_pie1 = go.Figure(data=[go.Pie(labels=df_fraud_possibility['fraud_possibility'],
-                             values=df_fraud_possibility['counts'])])
-    fig_pie1.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
-                      marker=dict(colors=px.colors.qualitative.Set2, line=dict(color='#000000', width=2)))
-    fig_pie1.update_layout(title_text='Fraud Possibility',title_x=0.5)
-    fig_pie1.update_layout(legend = dict(font = dict(size = 20)), width=600, height=600)
-    st.plotly_chart(fig_pie1)
-    
+
 def to_excel(df):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
