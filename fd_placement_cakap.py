@@ -72,12 +72,17 @@ with a2:
 
 '''
 ### Fraud Detection
+
 What Is Fraud Detection?
+
 Fraud detection is a collection of processes and techniques designed to identify, monitor, and prevent fraud.
+
 In the online business world, fraud, scams, and bad agents are damaging in a number of ways.
+
 Companies have to put steps in place to ensure that fraud is detected and stopped before it affects business.
 
 This dataset is a data placement test where the teacher has the possibility to commit fraud together with students. 
+
 as mentioned previously, so we collect data providing several metrics that could possibly indicate fraud
 '''
 
@@ -102,27 +107,27 @@ st.markdown("---")
 
 ##### Upload Placement Dataset Here (XLSX)
 '''
-
+'''
+Placement Dataset, it consists of 13 row and 37.454 columns of each Placement Test session record, including: student_id, agent_id, teacher_id, held_at, buy_premium_after_pt, student_presence.
+'''
 uploaded_file = st.file_uploader("Upload Placement File (XLSX)")
 if uploaded_file is not None:
     dataframe1 = pd.read_excel(uploaded_file)
     #st.write(dataframe)
-'''
-Placement Dataset, it consists of 13 row and 37.454 columns of each Placement Test session record, including: student_id, agent_id, teacher_id, held_at, buy_premium_after_pt, student_presence.
-'''
+
 df_p1 = dataframe1.copy()
 
 '''
 ##### Upload Activity Dataset Here (XLSX)
 '''
-
+'''
+Activity Dataset, it consists of 12 row and 37.452 columns of various activity products from each recorded student, including: user_id, attend_private, entry_club, feed_like, etc.
+'''
 uploaded_file = st.file_uploader("Upload Activity File (XLSX)")
 if uploaded_file is not None:
     dataframe2 = pd.read_excel(uploaded_file)
     #st.write(dataframe)
-'''
-Activity Dataset, it consists of 12 row and 37.452 columns of various activity products from each recorded student, including: user_id, attend_private, entry_club, feed_like, etc.
-'''
+
 df_a1 = dataframe2.copy()
 
 st.markdown("---")
@@ -367,7 +372,9 @@ Low.sort_values('total_student', axis = 0, ascending = False,
 Low = Low.reset_index(drop=True)
 
 
-
+'''
+### Data Profile
+'''
 col_1, col_2 = st.columns(2)
 with col_1:
      st.metric('Total Teacher', df_teacher['teacher_id'].nunique())
