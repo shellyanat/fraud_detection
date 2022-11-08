@@ -63,6 +63,13 @@ st.image(image, output_format='PNG', width=480)
 ## Fraud Detection by Data Analyst Team
 '''
 st.markdown("---")
+
+st.write("Business Process Flow")
+image = Image.open('flow.drawio.png)
+
+st.image(image, output_format='PNG', width=480)
+
+st.markdown("---")
 # techinal instruction
 '''
 ### Instructions
@@ -265,7 +272,7 @@ df_teacher['bp_n_percentage'] = df_teacher['buy_premium_n']/df_teacher['total_st
 df_teacher['teacher_id'] = df_teacher['teacher_id'].astype(int)
 df_teacher['total_student'] = df_teacher['total_student'].astype(int)
 df_teacher['buy_premium_y'] = df_teacher['buy_premium_y'].astype(int)
-df_teacher['buy_premium_n'] = df_teacher['total_student'].astype(int)
+df_teacher['buy_premium_n'] = df_teacher['buy_premium_n'].astype(int)
 
 
 #### F R A U D  P O S S I B I L I T Y
@@ -349,64 +356,49 @@ Low = Low.reset_index(drop=True)
 
 '''
 
-'''
-##### The Indicator Variable for Fraud Possibility
-'''
-col1, col2 = st.columns(2)
-with col1:
-    st.write('Total Student')
-    fig1 = px.scatter(df_teacher, x='teacher_id', y='total_student',
-                    title="Total Student Per Teacher Distribution")
-    st.plotly_chart(fig1)
-with col2:
-    st.write('Not Buy Premium Percentage')
-    fig2 = px.scatter(df_teacher, x='teacher_id', y='bp_n_percentage',
-                    title="Not Buy Premium Percentage Per Teacher Distribution")
-    st.plotly_chart(fig2)
+col_1, col_2 = st.columns(2)
+with col_1:
+     st.metric('Total Teacher', df_teacher['teacher_id'].nunique())
+with col_2:
+     st.metric('Total Student', df_teacher['total_student'].sum())                   
 
-col3,col4 = st.columns(2)
-with col3:
-    st.write('Not Held Percentage')
-    fig3 = px.scatter(df_teacher, x='teacher_id', y='not_held_percentage',
-                    title="Not Held Percentage Per Teacher Distribution")
-    st.plotly_chart(fig3)
-with col4:
-    st.write('Student Zero Activity Percentage')
-    fig4 = px.scatter(df_teacher, x='teacher_id', y='act_zero_percentage',
-                    title="Student Zero Activity Percentage Per Teacher Distribution")
-    st.plotly_chart(fig4)
+col_5, col_6 = st.columns(2)
+with col_5:
+    st.metric('Total Student Buy Premium', df_teacher['buy_premium_y'].sum())
+with col_6:
+    st.metric('Total Student Not Buy Premium', df_teacher['buy_premium_n'].sum())
 
-col5, col6 = st.columns(2)
-with col5:
-    st.write('Student Zero Activity Percentage with Total Student')
-    fig5 = px.scatter(df_teacher, x='total_student', y='act_zero_percentage',
-                    title="Student Zero Activity Percentage with Total Student")
-    st.plotly_chart(fig5)
-with col6:
-    st.write('Student Zero Activity Percentage with Not Buy Premium Percentage')
-    fig6 = px.scatter(df_teacher, x='total_student', y='bp_n_percentage',
-                    title="Student Zero Activity Percentage with Not Buy Premium Percentage")
-    st.plotly_chart(fig6)    
-
-#fig.show()
-
-tab1, tab2, tab3 = st.tabs(['Insight','Visualization','Dataframe'])
+tab1, tab2, tab3 = st.tabs(['Indicator','Visualization','Dataframe'])
 with tab1:
-    col_1, col_2 = st.columns(2)
-    with col_1:
-        st.metric('Total Teacher', df_teacher['teacher_id'].nunique())
-    with col_2:
-        st.metric('Total Student', df_teacher['total_student'].sum())
-    st.write("")
+    '''
+    ##### The Indicator Variable for Fraud Possibility
+    '''
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write('Total Student')
+        fig1 = px.scatter(df_teacher, x='teacher_id', y='total_student',
+                    title="Total Student Per Teacher Distribution")
+        st.plotly_chart(fig1)
+    with col2:
+        st.write('Not Buy Premium Percentage')
+        fig2 = px.scatter(df_teacher, x='total_student', y='bp_n_percentage',
+                    title="Not Buy Premium Percentage and Total Student")
+        st.plotly_chart(fig2)
 
-    col_5, col_6 = st.columns(2)
+    col3,col4 = st.columns(2)
+    with col3:
+        st.write('Not Held Percentage')
+        fig3 = px.scatter(df_teacher, x='total_student', y='not_held_percentage',
+                    title="Not Held Percentage and Total Student")
+        st.plotly_chart(fig3)
+    with col4:
+        st.write('Student Zero Activity Percentage')
+        fig4 = px.scatter(df_teacher, x='total_student', y='act_zero_percentage',
+                    title="Student Zero Activity Percentage and Total Student")
+        st.plotly_chart(fig4)                   
 
-    with col_5:
-        st.metric('Total Student Buy Premium', df_teacher['buy_premium_y'].sum())
 
-    with col_6:
-        st.metric('Total Student Not Buy Premium', df_teacher['buy_premium_n'].sum())
-
+with tab3:
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric('Total Teacher with Low Possibility of Fraud', Low['teacher_id'].nunique())
@@ -414,9 +406,6 @@ with tab1:
         st.metric('Total Teacher with Medium Possibility of Fraud', Medium['teacher_id'].nunique())    
     with col3:
         st.metric('Total Teacher with High Possibility of Fraud', High['teacher_id'].nunique())
-
-
-with tab3:
     #checkbox
     #by fraud possibility
     pil4, pil5 = st.columns(2)
@@ -440,7 +429,6 @@ with tab3:
     st.write('Dataframe Teacher and Possibility of Fraud Level')
     st.dataframe(data)
         
-
 with tab2:
 #percentage of fp
     labels = ['buy_premium_y', 'buy_premium_n']
