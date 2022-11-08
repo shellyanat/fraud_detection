@@ -396,7 +396,7 @@ with col7:
 with col8:
     df_teacher_show = df_teacher.sort_values(by=['total_student'],ascending=False).head()
     fig_pie1 = go.Figure(data=[go.Pie(labels=df_teacher_show['teacher_id'],
-                             values=df_teacher['total_student'])])
+                             values=df_teacher_show['total_student'])])
     fig_pie1.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
                       marker=dict(colors=px.colors.qualitative.Set2, line=dict(color='#000000', width=2)))
     fig_pie1.update_layout(title_text='Top 5 Teacher With The Most Student',title_x=0.5)
