@@ -352,7 +352,7 @@ fig = go.Figure(
     layout=dict(title=dict(text='Total Student Per Teacher Distribution'))
 )
 st.plotly_chart(fig)
-
+st.line_chart(data = df_teacher, x= "total_student", y = "teacher_id")
 
 tab1, tab2, tab3 = st.tabs(['Insight','Visualization','Dataframe'])
 with tab1:
