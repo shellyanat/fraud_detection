@@ -394,7 +394,7 @@ with col7:
     fig2.update_layout(title_text='Buy Premium Percentage',title_x=0.5)
     st.plotly_chart(fig2)
 with col8:
-    df_teacher_show = df_teacher.head()
+    df_teacher_show = df_teacher.sort_values(by=['total_student'],ascending=False).head()
     fig_pie1 = go.Figure(data=[go.Pie(labels=df_teacher_show['teacher_id'],
                              values=df_teacher['total_student'])])
     fig_pie1.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
@@ -438,7 +438,7 @@ with tab1:
 
 
 with tab3:
-    a1, a2 = st.columns([2,4])
+    a1, a2 = st.columns([1,4])
     with a2:
         df_fraud_possibility = df_fp['fraud_possibility'].value_counts().rename_axis('fraud_possibility').reset_index(name='counts')
         fig_pie1 = go.Figure(data=[go.Pie(labels=df_fraud_possibility['fraud_possibility'],
