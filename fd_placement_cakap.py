@@ -345,28 +345,40 @@ Low = Low.reset_index(drop=True)
 
 '''
 ### Fraud Detection
+
+
 '''
 
+'''
+##### The Indicator Variable for Fraud Possibility
+'''
 col1, col2 = st.columns(2)
 with col1:
+    st.write('Total Student')
     fig1 = px.scatter(df_teacher, x='teacher_id', y='total_student',
                     title="Total Student Per Teacher Distribution")
     st.plotly_chart(fig1)
 with col2:
+    st.write('Not Buy Premium Percentage')
     fig2 = px.scatter(df_teacher, x='teacher_id', y='bp_n_percentage',
                     title="Not Buy Premium Percentage Per Teacher Distribution")
     st.plotly_chart(fig2)
 
 col3,col4 = st.columns(2)
 with col3:
+    st.write('Not Held Percentage')
     fig3 = px.scatter(df_teacher, x='teacher_id', y='not_held_percentage',
                     title="Not Held Percentage Per Teacher Distribution")
     st.plotly_chart(fig3)
 with col4:
+    st.write('Student Zero Activity Percentage')
     fig4 = px.scatter(df_teacher, x='teacher_id', y='act_zero_percentage',
                     title="Student Zero Activity Percentage Per Teacher Distribution")
     st.plotly_chart(fig4)
-
+st.write('Student Zero Activity Percentage with Total Student')
+fig5 = px.scatter(df_teacher, x='total_student', y='act_zero_percentage',
+                    title="Student Zero Activity Percentage with Total Student")
+st.plotly_chart(fig5)
 
 #fig.show()
 
