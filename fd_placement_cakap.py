@@ -462,10 +462,15 @@ with tab2:
 #percentage of fp
     '''
     Fraud Possibility Level is determined by a combination of 4 indicator variables.
+    
     Fraud level is determined by a combination of 4 indicator variables. with the help of descriptive statistics.
+    
     Variables that exceed the quantile 0.75 for the Total Student will get 1 fraud point, as well as for the Not Held Percentage.
+    
     For not buy premium percentage, if the teacher exceeds quantile 0.50 will get 1 point, 
+    
     if less than quantile 0.5 but more than or equal to quantile 0.25 will get 0.5 fraud points.
+    
     For the zero percentage activity variable, if the teacher has a value of more than 0.9 quantile, he will get 0.5 fraud points.
     '''
     df_teacher2 = df_teacher.copy()
