@@ -415,6 +415,7 @@ with tab2:
     fig_pie1.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
                       marker=dict(colors=px.colors.qualitative.Set2, line=dict(color='#000000', width=2)))
     fig_pie1.update_layout(title_text='Fraud Possibility',title_x=0.5)
+    fig_pie1.update_layout(legend = dict(font = dict(size = 20)), width=600, height=600)
     st.plotly_chart(fig_pie1)
     
 def to_excel(df):
