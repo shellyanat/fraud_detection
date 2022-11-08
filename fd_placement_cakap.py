@@ -383,16 +383,30 @@ with col_5:
 with col_6:
     st.metric('Total Student Not Buy Premium', df_teacher['buy_premium_n'].sum())
 
-labels = ['buy_premium_y', 'buy_premium_n']
-values = [df_teacher['buy_premium_y'].sum(), df_teacher['buy_premium_n'].sum()]
-fig2 = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.3)])
-fig2.update_layout(legend = dict(font = dict(size = 20)), width=600, height=600)
-fig2.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
+col7, col8 = st.columns(2)
+with col7:
+    labels = ['buy_premium_y', 'buy_premium_n']
+    values = [df_teacher['buy_premium_y'].sum(), df_teacher['buy_premium_n'].sum()]
+    fig2 = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.3)])
+    fig2.update_layout(legend = dict(font = dict(size = 20)), width=600, height=600)
+    fig2.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
                       marker=dict(colors=px.colors.qualitative.Set2, line=dict(color='#000000', width=2)))
-fig2.update_layout(title_text='Buy Premium Percentage',title_x=0.5)
-st.plotly_chart(fig2)
+    fig2.update_layout(title_text='Buy Premium Percentage',title_x=0.5)
+    st.plotly_chart(fig2)
+with col8:
+    df_teacher_show = df_teacher.head()
+    fig_pie1 = go.Figure(data=[go.Pie(labels=df_teacher_show['teacher_id'],
+                             values=df_teacher['total_student'])])
+    fig_pie1.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
+                      marker=dict(colors=px.colors.qualitative.Set2, line=dict(color='#000000', width=2)))
+    fig_pie1.update_layout(title_text='Top 5 Teacher With The Most Student',title_x=0.5)
+    fig_pie1.update_layout(legend = dict(font = dict(size = 20)), width=600, height=600)
+    st.plotly_chart(fig_pie1)
     
-st.markdown("---")    
+st.markdown("---")  
+'''
+### Analyze Data
+'''
 tab1, tab2, tab3 = st.tabs(['Indicator Variable','Fraud Possibility Level','Dataframe'])
 with tab1:
     '''
@@ -439,16 +453,16 @@ with tab3:
         fraud_possibility = st.container()  
         all = st.checkbox("Select all", value=True)
     if all:
-        selected_options = fraud_possibility.multiselect("Pilih satu atau lebih kategori artis:",
+        selected_options = fraud_possibility.multiselect("Choose Fraud Possibility Level:",
             fraud_possibility_list, fraud_possibility_list)
     else:
-        selected_options =  fraud_possibility.multiselect("Pilih satu atau lebih kategori artis:",
+        selected_options =  fraud_possibility.multiselect("Choose Fraud Possibility Level:",
             fraud_possibility_list)
     data = df_fp[df_fp['fraud_possibility'].isin(selected_options)]
     with pil5:
         st.write("")
         st.write("")
-        st.metric("Total Teacher", len(data))
+        st.metric("Total Teacher on Dataframe", len(data))
 
 
     st.write('Dataframe Teacher and Possibility of Fraud Level')
