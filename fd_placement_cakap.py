@@ -352,7 +352,7 @@ Low = Low.reset_index(drop=True)
 #    layout=dict(title=dict(text='Total Student Per Teacher Distribution'))
 #)
 
-fig = px.scatter(df_teacher, x='teacher_id', y='total_student', color="species",
+fig = px.scatter(df_teacher, x='teacher_id', y='total_student',
                 title="Total Student Per Teacher Distribution")
 st.plotly_chart(fig)
 #fig.show()
