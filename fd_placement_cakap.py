@@ -72,13 +72,13 @@ with a2:
 
 '''
 ### Fraud Detection
-######What Is Fraud Detection?
-########Fraud detection is a collection of processes and techniques designed to identify, monitor, and prevent fraud.
-########In the online business world, fraud, scams, and bad agents are damaging in a number of ways.
-########Companies have to put steps in place to ensure that fraud is detected and stopped before it affects business.
+What Is Fraud Detection?
+Fraud detection is a collection of processes and techniques designed to identify, monitor, and prevent fraud.
+In the online business world, fraud, scams, and bad agents are damaging in a number of ways.
+Companies have to put steps in place to ensure that fraud is detected and stopped before it affects business.
 
-########This dataset is a data placement test where the teacher has the possibility to commit fraud together with students. 
-########as mentioned previously, so we collect data providing several metrics that could possibly indicate fraud
+This dataset is a data placement test where the teacher has the possibility to commit fraud together with students. 
+as mentioned previously, so we collect data providing several metrics that could possibly indicate fraud
 '''
 
 
@@ -108,7 +108,7 @@ if uploaded_file is not None:
     dataframe1 = pd.read_excel(uploaded_file)
     #st.write(dataframe)
 '''
-#########Placement Dataset, it consists of 13 row and 37.454 columns of each Placement Test session record, including: student_id, agent_id, teacher_id, held_at, buy_premium_after_pt, student_presence.
+Placement Dataset, it consists of 13 row and 37.454 columns of each Placement Test session record, including: student_id, agent_id, teacher_id, held_at, buy_premium_after_pt, student_presence.
 '''
 df_p1 = dataframe1.copy()
 
@@ -121,7 +121,7 @@ if uploaded_file is not None:
     dataframe2 = pd.read_excel(uploaded_file)
     #st.write(dataframe)
 '''
-#########Activity Dataset, it consists of 12 row and 37.452 columns of various activity products from each recorded student, (including: user_id, attend_private, entry_club, feed_like, etc)
+Activity Dataset, it consists of 12 row and 37.452 columns of various activity products from each recorded student, including: user_id, attend_private, entry_club, feed_like, etc.
 '''
 df_a1 = dataframe2.copy()
 
@@ -453,8 +453,17 @@ with tab3:
         
 with tab2:
 #percentage of fp
-
-
+    '''
+    Fraud Possibility Level is determined by a combination of 4 indicator variables.
+    Fraud level is determined by a combination of 4 indicator variables. with the help of descriptive statistics.
+    Variables that exceed the quantile 0.75 for the Total Student will get 1 fraud point, as well as for the Not Held Percentage.
+    For not buy premium percentage, if the teacher exceeds quantile 0.50 will get 1 point, 
+    if less than quantile 0.5 but more than or equal to quantile 0.25 will get 0.5 fraud points.
+    For the zero percentage activity variable, if the teacher has a value of more than 0.9 quantile, he will get 0.5 fraud points.
+    '''
+    df_teacher2 = df_teacher.copy()
+    df_teacher2 = df_teacher2.drop(df_teacher2.iloc[:,1:-8].columns, axis=1)
+    df_teacher2.describe()
     df_fraud_possibility = df_fp['fraud_possibility'].value_counts().rename_axis('fraud_possibility').reset_index(name='counts')
     fig_pie1 = go.Figure(data=[go.Pie(labels=df_fraud_possibility['fraud_possibility'],
                              values=df_fraud_possibility['counts'])])
