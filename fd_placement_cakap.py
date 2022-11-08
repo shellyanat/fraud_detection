@@ -406,7 +406,7 @@ with tab2:
     fig_pie1.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
                       marker=dict(colors=px.colors.qualitative.Set2, line=dict(color='#000000', width=2)))
     fig_pie1.update_layout(title_text='Fraud Possibility',title_x=0.5)
-
+    st.plotly_chart(fig2)
 
     labels = ['buy_premium_y', 'buy_premium_n']
     values = [df_teacher['buy_premium_y'].sum(), df_teacher['buy_premium_n'].sum()]
