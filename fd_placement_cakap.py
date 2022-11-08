@@ -480,6 +480,14 @@ with tab2:
     if less than quantile 0.5 but more than or equal to quantile 0.25 will get 0.5 fraud points.
     
     For the zero percentage activity variable, if the teacher has a value of more than 0.9 quantile, he will get 0.5 fraud points.
+    
+    
+    
+    If the total of fraud point is more than or equal to 3, the possibility level of fraud is High.
+    
+    If the total of fraud point is more than or equal to 2 and less than 3, the possibility level of fraud is Medium.
+    
+    If the total of fraud point is less than 2, the possibility level of fraud is Low.
     '''
     df_teacher2 = df_teacher.copy()
     df_teacher2 = df_teacher2.drop(df_teacher2.iloc[:,1:-8].columns, axis=1)
