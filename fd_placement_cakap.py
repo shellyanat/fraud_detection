@@ -347,12 +347,15 @@ Low = Low.reset_index(drop=True)
 ### Fraud Detection
 '''
 
-fig = go.Figure(
-    data=[go.Scatter(y=df_teacher['teacher_id'], x=df_teacher['total_student'] ,line=dict(color='darkturquoise'))],
-    layout=dict(title=dict(text='Total Student Per Teacher Distribution'))
-)
+#fig = go.Figure(
+#    data=[go.Scatter(y=df_teacher['teacher_id'], x=df_teacher['total_student'] ,line=dict(color='darkturquoise'))],
+#    layout=dict(title=dict(text='Total Student Per Teacher Distribution'))
+#)
+
+fig = px.scatter(df_teacher, x='teacher_id', y='total_student', color="species",
+                title="Total Student Per Teacher Distribution)
 st.plotly_chart(fig)
-st.line_chart(data = df_teacher, x= "total_student", y = "teacher_id")
+#fig.show()
 
 tab1, tab2, tab3 = st.tabs(['Insight','Visualization','Dataframe'])
 with tab1:
