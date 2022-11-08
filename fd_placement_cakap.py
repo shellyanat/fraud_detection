@@ -354,17 +354,17 @@ with col1:
     st.plotly_chart(fig1)
 with col2:
     fig2 = px.scatter(df_teacher, x='teacher_id', y='bp_n_percentage',
-                    title="Total Student Per Teacher Distribution")
+                    title="Not Buy Premium Percentage Per Teacher Distribution")
     st.plotly_chart(fig2)
 
 col3,col4 = st.columns(2)
 with col3:
     fig3 = px.scatter(df_teacher, x='teacher_id', y='not_held_percentage',
-                    title="Total Student Per Teacher Distribution")
+                    title="Not Held Percentage Per Teacher Distribution")
     st.plotly_chart(fig3)
 with col4:
     fig4 = px.scatter(df_teacher, x='teacher_id', y='act_zero_percentage',
-                    title="Total Student Per Teacher Distribution")
+                    title="Student Zero Activity Percentage Per Teacher Distribution")
     st.plotly_chart(fig4)
 
 
