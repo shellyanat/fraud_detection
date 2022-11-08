@@ -75,14 +75,10 @@ with a2:
 
 What Is Fraud Detection?
 
-Fraud detection is a collection of processes and techniques designed to identify, monitor, and prevent fraud.
-
-In the online business world, fraud, scams, and bad agents are damaging in a number of ways.
-
+Fraud detection is a collection of processes and techniques designed to identify, monitor, and prevent fraud. In the online business world, fraud, scams, and bad agents are damaging in a number of ways.
 Companies have to put steps in place to ensure that fraud is detected and stopped before it affects business.
 
 This dataset is a data placement test where the teacher has the possibility to commit fraud together with students. 
-
 as mentioned previously, so we collect data providing several metrics that could possibly indicate fraud
 '''
 
@@ -461,8 +457,6 @@ with tab3:
 with tab2:
 #percentage of fp
     '''
-    Fraud Possibility Level is determined by a combination of 4 indicator variables.
-    
     Fraud level is determined by a combination of 4 indicator variables. with the help of descriptive statistics.
     
     Variables that exceed the quantile 0.75 for the Total Student will get 1 fraud point, as well as for the Not Held Percentage.
@@ -475,7 +469,7 @@ with tab2:
     '''
     df_teacher2 = df_teacher.copy()
     df_teacher2 = df_teacher2.drop(df_teacher2.iloc[:,1:-8].columns, axis=1)
-    df_teacher2.describe()
+    st.write(df_teacher2.describe())
     df_fraud_possibility = df_fp['fraud_possibility'].value_counts().rename_axis('fraud_possibility').reset_index(name='counts')
     fig_pie1 = go.Figure(data=[go.Pie(labels=df_fraud_possibility['fraud_possibility'],
                              values=df_fraud_possibility['counts'])])
