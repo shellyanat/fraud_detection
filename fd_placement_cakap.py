@@ -17,6 +17,7 @@ from pyxlsb import open_workbook as open_xlsb
 import plotly.graph_objects as go
 
 from PIL import Image
+import plotly.express as px
 
 #page setting
 st.markdown('''
