@@ -65,7 +65,7 @@ st.image(image, output_format='PNG', width=480)
 st.markdown("---")
 
 st.write("Business Process Flow")
-image = Image.open('flow.drawio.png)
+image = Image.open('flow.drawio.png')
 
 st.image(image, output_format='PNG', width=480)
 
