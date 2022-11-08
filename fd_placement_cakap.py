@@ -63,11 +63,25 @@ st.image(image, output_format='PNG', width=480)
 ## Fraud Detection by Data Analyst Team
 '''
 st.markdown("---")
+a1,a2,a3 = st.columns[2,4,2]
+with a2:
+    st.write("Business Process Flow")
+    image = Image.open('flow.drawio.png')
 
-st.write("Business Process Flow")
-image = Image.open('flow.drawio.png')
+    st.image(image, output_format='PNG', width=480)
 
-st.image(image, output_format='PNG', width=480)
+'''
+### Fraud Detection
+######What Is Fraud Detection?
+########Fraud detection is a collection of processes and techniques designed to identify, monitor, and prevent fraud.
+########In the online business world, fraud, scams, and bad agents are damaging in a number of ways.
+########Companies have to put steps in place to ensure that fraud is detected and stopped before it affects business.
+
+########This dataset is a data placement test where the teacher has the possibility to commit fraud together with students. 
+########as mentioned previously, so we collect data providing several metrics that could possibly indicate fraud
+'''
+
+
 
 st.markdown("---")
 # techinal instruction
@@ -93,8 +107,9 @@ uploaded_file = st.file_uploader("Upload Placement File (XLSX)")
 if uploaded_file is not None:
     dataframe1 = pd.read_excel(uploaded_file)
     #st.write(dataframe)
-else:
-    st.write("!!! Import Placement Dataset")
+'''
+#########Placement Dataset, it consists of 13 row and 37.454 columns of each Placement Test session record, including: student_id, agent_id, teacher_id, held_at, buy_premium_after_pt, student_presence.
+'''
 df_p1 = dataframe1.copy()
 
 '''
@@ -105,8 +120,9 @@ uploaded_file = st.file_uploader("Upload Activity File (XLSX)")
 if uploaded_file is not None:
     dataframe2 = pd.read_excel(uploaded_file)
     #st.write(dataframe)
-else:
-    st.write("!!! Import Activity Dataset")
+'''
+#########Activity Dataset, it consists of 12 row and 37.452 columns of various activity products from each recorded student, (including: user_id, attend_private, entry_club, feed_like, etc)
+'''
 df_a1 = dataframe2.copy()
 
 st.markdown("---")
@@ -350,11 +366,7 @@ Low.sort_values('total_student', axis = 0, ascending = False,
                  inplace = True)
 Low = Low.reset_index(drop=True)
 
-'''
-### Fraud Detection
 
-
-'''
 
 col_1, col_2 = st.columns(2)
 with col_1:
@@ -368,7 +380,17 @@ with col_5:
 with col_6:
     st.metric('Total Student Not Buy Premium', df_teacher['buy_premium_n'].sum())
 
-tab1, tab2, tab3 = st.tabs(['Indicator','Visualization','Dataframe'])
+labels = ['buy_premium_y', 'buy_premium_n']
+values = [df_teacher['buy_premium_y'].sum(), df_teacher['buy_premium_n'].sum()]
+fig2 = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.3)])
+fig2.update_layout(legend = dict(font = dict(size = 20)), width=600, height=600)
+fig2.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
+                      marker=dict(colors=px.colors.qualitative.Set2, line=dict(color='#000000', width=2)))
+fig2.update_layout(title_text='Buy Premium Percentage',title_x=0.5)
+st.plotly_chart(fig2)
+    
+st.markdown("---")    
+tab1, tab2, tab3 = st.tabs(['Indicator Variable','Fraud Possibility Level','Dataframe'])
 with tab1:
     '''
     ##### The Indicator Variable for Fraud Possibility
@@ -431,14 +453,7 @@ with tab3:
         
 with tab2:
 #percentage of fp
-    labels = ['buy_premium_y', 'buy_premium_n']
-    values = [df_teacher['buy_premium_y'].sum(), df_teacher['buy_premium_n'].sum()]
-    fig2 = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.3)])
-    fig2.update_layout(legend = dict(font = dict(size = 20)), width=600, height=600)
-    fig2.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
-                      marker=dict(colors=px.colors.qualitative.Set2, line=dict(color='#000000', width=2)))
-    fig2.update_layout(title_text='Buy Premium Percentage',title_x=0.5)
-    st.plotly_chart(fig2)
+
 
     df_fraud_possibility = df_fp['fraud_possibility'].value_counts().rename_axis('fraud_possibility').reset_index(name='counts')
     fig_pie1 = go.Figure(data=[go.Pie(labels=df_fraud_possibility['fraud_possibility'],
