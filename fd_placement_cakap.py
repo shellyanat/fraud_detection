@@ -438,15 +438,8 @@ with tab1:
 
 
 with tab3:
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.metric('Total Teacher with Low Possibility of Fraud', Low['teacher_id'].nunique())
-    with col2:
-        st.metric('Total Teacher with Medium Possibility of Fraud', Medium['teacher_id'].nunique())    
-    with col3:
-        st.metric('Total Teacher with High Possibility of Fraud', High['teacher_id'].nunique())
     a1, a2 = st.columns([2,4])
-    with a1:
+    with a2:
         df_fraud_possibility = df_fp['fraud_possibility'].value_counts().rename_axis('fraud_possibility').reset_index(name='counts')
         fig_pie1 = go.Figure(data=[go.Pie(labels=df_fraud_possibility['fraud_possibility'],
                              values=df_fraud_possibility['counts'])])
@@ -504,6 +497,32 @@ with tab2:
     df_teacher2 = df_teacher2.drop(df_teacher2.iloc[:,1:-8].columns, axis=1)
     st.write(df_teacher2.describe())
 
+st.markdown("---")
+'''
+### Conclusion
+'''
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric('Total Teacher with Low Possibility of Fraud', Low['teacher_id'].nunique())
+with col2:
+    st.metric('Total Teacher with Medium Possibility of Fraud', Medium['teacher_id'].nunique())    
+with col3:
+    st.metric('Total Teacher with High Possibility of Fraud', High['teacher_id'].nunique())
+'''
+After see this number, it can be concluded that all four parameters above that most likely can indicate fraud.
+
+These 4 parameters with the results we want are looking at the distribution and anomalies, we make it binary and combine the parameters to conclude fraud classification.
+
+
+
+###### Suggestion:
+
+1. Students who buy Premium Package are choosing their own teacher, we can make this teacher selection automatically by the system to avoid fraud
+
+2. Reports are usually by the teacher, We can develop a system that can detect if the student really attends and does Placement test or not
+
+3. Carry out further investigations (for high possibility) can be monitored specifically (ask for evidence, etc.)
+'''        
 def to_excel(df):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
