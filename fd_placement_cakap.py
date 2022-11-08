@@ -389,6 +389,8 @@ with tab3:
             fraud_possibility_list)
     data = df_fp[df_fp['fraud_possibility'].isin(selected_options)]
     with pil5:
+        st.write("")
+        st.write("")
         st.metric("Total Teacher", len(data))
 
 
