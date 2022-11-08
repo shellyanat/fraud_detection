@@ -379,11 +379,12 @@ with tab3:
     pil4, pil5 = st.columns(2)
     with pil4:
         fraud_possibility_list = df_fp['fraud_possibility'].unique()
-        fraud_possibility = st.container()   
+        fraud_possibility = st.container()  
+        all = st.checkbox("Select all", value=True)
     with pil5:
         st.write("")
         st.write("")
-        all = st.checkbox("Select all", value=True)
+        st.metric("Total Teacher", len(data))
     if all:
         selected_options = fraud_possibility.multiselect("Pilih satu atau lebih kategori artis:",
             fraud_possibility_list, fraud_possibility_list)
@@ -392,12 +393,9 @@ with tab3:
             fraud_possibility_list)
     data = df_fp[df_fp['fraud_possibility'].isin(selected_options)]
 
-    a1,a2=st.columns(2)
-    with a1:
-        st.write('Dataframe Teacher and Possibility of Fraud Level')
-        st.dataframe(data)
-    with a2:
-        st.metric("Total Teacher", len(data))
+    st.write('Dataframe Teacher and Possibility of Fraud Level')
+    st.dataframe(data)
+        
 
 with tab2:
 #percentage of fp
