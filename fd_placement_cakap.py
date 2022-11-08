@@ -375,10 +375,18 @@ with col4:
     fig4 = px.scatter(df_teacher, x='teacher_id', y='act_zero_percentage',
                     title="Student Zero Activity Percentage Per Teacher Distribution")
     st.plotly_chart(fig4)
-st.write('Student Zero Activity Percentage with Total Student')
-fig5 = px.scatter(df_teacher, x='total_student', y='act_zero_percentage',
+
+col5, col6 = st.columns(2)
+with col5:
+    st.write('Student Zero Activity Percentage with Total Student')
+    fig5 = px.scatter(df_teacher, x='total_student', y='act_zero_percentage',
                     title="Student Zero Activity Percentage with Total Student")
-st.plotly_chart(fig5)
+    st.plotly_chart(fig5)
+with col6:
+    st.write('Student Zero Activity Percentage with Not Buy Premium Percentage')
+    fig6 = px.scatter(df_teacher, x='total_student', y='bp_n_percentage',
+                    title="Student Zero Activity Percentage with Not Buy Premium Percentage")
+    st.plotly_chart(fig6)    
 
 #fig.show()
 
