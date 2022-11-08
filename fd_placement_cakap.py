@@ -63,7 +63,7 @@ st.image(image, output_format='PNG', width=480)
 ## Fraud Detection by Data Analyst Team
 '''
 st.markdown("---")
-a1,a2,a3 = st.columns[2,4,2]
+a1,a2,a3 = st.columns([2,4,2])
 with a2:
     st.write("Business Process Flow")
     image = Image.open('flow.drawio.png')
