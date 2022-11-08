@@ -353,7 +353,7 @@ Low = Low.reset_index(drop=True)
 #)
 
 fig = px.scatter(df_teacher, x='teacher_id', y='total_student', color="species",
-                title="Total Student Per Teacher Distribution)
+                title="Total Student Per Teacher Distribution")
 st.plotly_chart(fig)
 #fig.show()
 
