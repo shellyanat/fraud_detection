@@ -548,7 +548,7 @@ st.download_button(label='📥 Download Fraud Possibility Data',
                                 file_name= 'fraud_possibility_teacher.xlsx')
 
 '''
-######### Glosarium
+######## Glosarium
 '''
 st.caption("buy_premium_y       : student buy premium package")
 st.caption("buy_premium_n       : student not buy premium package")
