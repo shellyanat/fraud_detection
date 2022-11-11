@@ -72,7 +72,7 @@ with a2:
     st.write("Business Process Flow")
     image = Image.open('flow.drawio.png')
 
-    st.image(image, output_format='PNG', width=600)
+    st.image(image, output_format='PNG', width=800)
 
 '''
 ### Fraud Detection
