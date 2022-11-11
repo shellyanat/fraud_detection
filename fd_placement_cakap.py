@@ -547,9 +547,8 @@ st.download_button(label='📥 Download Fraud Possibility Data',
                                 data=df_xlsx ,
                                 file_name= 'fraud_possibility_teacher.xlsx')
 
-'''
-######## Glosarium
-'''
+st.markdown('######## Glosarium')
+
 st.caption("buy_premium_y       : student buy premium package")
 st.caption("buy_premium_n       : student not buy premium package")
 st.caption("bp_n_percentage     : the percentage of many students who did not buy the premium package per teachers")
