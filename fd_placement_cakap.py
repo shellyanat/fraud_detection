@@ -20,6 +20,10 @@ from PIL import Image
 import plotly.express as px
 
 #page setting
+
+#page setting
+st.set_page_config(page_title='Teacher Fraud Detection CAKAP',layout="wide")
+
 st.markdown('''
 <style>
 /*center metric label*/
