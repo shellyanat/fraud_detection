@@ -547,7 +547,8 @@ st.download_button(label='📥 Download Fraud Possibility Data',
                                 data=df_xlsx ,
                                 file_name= 'fraud_possibility_teacher.xlsx')
 
-st.markdown(''' ######## Dictionary ''')
+st.write("")
+st.markdown('Dictionary')
 
 st.caption("buy_premium_y       : student buy premium package")
 st.caption("buy_premium_n       : student not buy premium package")
