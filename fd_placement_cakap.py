@@ -527,6 +527,10 @@ These 4 parameters with the results we want are looking at the distribution and 
 
 3. Carry out further investigations (for high possibility) can be monitored specifically (ask for evidence, etc.)
 '''        
+
+'''
+###### Download Clean Dataset
+'''
 def to_excel(df):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -542,3 +546,14 @@ df_xlsx = to_excel(df_teacher)
 st.download_button(label='📥 Download Fraud Possibility Data',
                                 data=df_xlsx ,
                                 file_name= 'fraud_possibility_teacher.xlsx')
+
+'''
+######### Glosarium
+'''
+st.caption("buy_premium_y       : student buy premium package")
+st.caption("buy_premium_n       : student not buy premium package")
+st.caption("bp_n_percentage     : the percentage of many students who did not buy the premium package per teachers")
+st.caption("not_held_percentage : the percentage of students who do not held the phone per teacher")
+st.caption("not_held_percentage : the percentage of students who do not held the phone per teacher")
+st.caption("act_zero_percentage : the percentage of many students with total activity is zero per teacher")
+
